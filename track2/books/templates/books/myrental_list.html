@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title%} 나의 대여목록 {% endblock %}
 {% block content %}
-<h1>나의 대여목록</h1>
+<h1>나의 대여목록 </h1>
+<h3>전체 대여수: {{rental_count}} | 대여중: {{rental_count_not_return}} </h3>
+
 <ul class="list-group">
     {% for rental in rentals %}
    <li class="list-group-item"> 도서명: {{rental.rental_book}} | 대여일: {{ rental.rental_date }}</li>
@@ -12,5 +14,10 @@
     {% endif %}
 {% endfor %}
 </ul>
-
+<h1>나의 리뷰 목록</h1>
+<ul class="list-group">
+    {% for review in reviews %}
+   <li class="list-group-item"> 도서명: {{review.review_book}} | 평점: {{ review.rating }} | {{review.review}}</li>
+{% endfor %}
+</ul>
 {% endblock %}

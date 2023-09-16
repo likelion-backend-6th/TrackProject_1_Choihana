@@ -1,10 +1,13 @@
 import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Avg
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
-from .models import Book, Rental
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView
+from .models import Book, Rental, ReviewRating
 from .tasks import mock, book_return
+from .forms import ReviewForm
 import time
 
 # celery simple test
@@ -44,8 +47,31 @@ class BookDetailView(DetailView):
             # 해결: if문으로 대여할 도서 있을때만 get 처리
             if context['rental']:
                 context['rental_id']=Rental.objects.get(rental_user=self.request.user, rental_book=book_id, return_date__isnull=True)
+
+        # 리뷰 리스트
+        context['review'] = ReviewRating.objects.filter(review_book=book_id)
+        # 리뷰 평점
+        context['review_avg'] = ReviewRating.objects.filter(review_book=book_id).aggregate(Avg('rating'))['rating__avg']
+
+        # 리뷰작성 폼
+        context['form'] = ReviewForm()
+
         return context
 
+    # 리뷰 작성 (POST method)
+    def post(self, request, pk):
+        form = ReviewForm(request.POST)
+        book = Book.objects.get(pk=pk)
+        if form.is_valid():
+            #form.save()
+            r = form.save(commit=False)
+            data = form.cleaned_data
+            r.review_book = book
+            r.review_user = request.user
+            r.review = data['review']
+            r.rating = data['rating']
+            r.save()
+            return redirect('book_detail', pk=pk)
 
 
 # 대여하기 기능 구현
@@ -82,8 +108,9 @@ class MyRentalListView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Rental.objects.filter(rental_user=self.request.user)
 
-
-
-
-
-
+    def get_context_data(self,  **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rental_count'] = Rental.objects.filter(rental_user=self.request.user).count()
+        context['rental_count_not_return'] = Rental.objects.filter(rental_user=self.request.user, return_date__isnull=True).count()
+        context['reviews'] = ReviewRating.objects.filter(review_user=self.request.user)
+        return context

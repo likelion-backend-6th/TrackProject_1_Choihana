@@ -5,7 +5,6 @@
 {% block content %}
     <div class="container text-container">
     <h1>{{book.title}} </h1>
-
         <div class="row">
             <div class="col">
                 {% if rental %}
@@ -13,7 +12,6 @@
                     <a href="{% url 'book_return' rental_id.id %}">반납하기</a></p>
                  {% elif book.stock %}
                 <a href="{% url 'book_rental' book.id %}">대여하기</a>
-
             </div>
             <div class="col">
                 (잔여수량: {{book.stock}})
@@ -28,6 +26,7 @@
         </div>
 
         <div clas="row">
+
             <p>{{book.summary}}</p>
         </div>
 
@@ -35,8 +34,28 @@
     <div class="row">
         <img class='w-50' src="{{book.image.url}}" alt="">
     </div>
-    </div>
 
+        <div class="row">
+            <h3>리뷰 작성</h3>
+            <form method="POST" class="form-control">
+                {% csrf_token %}
+                <p>별점(1~5): {{ form.rating}}</p>
+                {{form.review}}
+
+                <input type="submit" value ='리뷰 등록'>
+            </form>
+        </div>
+        <div class="row">
+            <h3>리뷰 목록 (평점: {{ review_avg|floatformat:1 }}점) </h3>
+            <ul class="list-group">
+                {% for r in review %}
+                <li class="list-group-item">
+                    <p>{{r.rating}}점|{{r.review}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
 {% endblock %}
 

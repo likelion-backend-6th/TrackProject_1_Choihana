@@ -37,7 +37,7 @@
         {% if request.user.is_authenticated %}
 
         {{request.user|title}}님,
-        <a href="{% url 'my_rentals' %}">나의 대여목록</a> |
+        <a href="{% url 'my_rentals' %}">마이페이지</a> |
     <a href="{% url 'logout' %}">로그아웃</a>
     {% else %}
 
