@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+책 리스트
+{% endblock %}
+{% block content %}
+<h1> 책 리스트 </h1>
+<p> 대여가능 책 {{count}}권 </p>
+
+<div class="input-group mb-3">
+    <form method="GET" style="margin-top: 20px; display: flex;">
+    <input class='form-control' type="text" name="search-area" value="{{search}}">
+    <input class='btn btn-secondary' type="submit" value = '도서검색'>
+</form>
+
+</div>
+<div>
+    <ul class="list-group">
+    {% for book in books %}
+        <li class="list-group-item"><a href="{% url 'book_detail' book.id %}">{{ book.title }}</a>
+            {% if book.stock > 0 %} <p>잔여수량: {{book.stock}}권</p>
+            {% else %} <p style="color: #EB796F">재고없음</p> {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

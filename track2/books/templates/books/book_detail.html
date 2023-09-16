@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+{{book.title}}
+{% endblock %}
+{% block content %}
+    <div class="container text-container">
+    <h1>{{book.title}} </h1>
+
+        <div class="row">
+            <div class="col">
+                {% if rental %}
+                <p style="color: darkseagreen">대여중
+                    <a href="{% url 'book_return' rental_id.id %}">반납하기</a></p>
+                 {% elif book.stock %}
+                <a href="{% url 'book_rental' book.id %}">대여하기</a>
+
+            </div>
+            <div class="col">
+                (잔여수량: {{book.stock}})
+            </div>
+            <div class="col">
+                {% else %}
+            <p style="color: #EB796F">재고없음</p>
+            {% endif %}
+            </div>
+
+
+        </div>
+
+        <div clas="row">
+            <p>{{book.summary}}</p>
+        </div>
+
+
+    <div class="row">
+        <img class='w-50' src="{{book.image.url}}" alt="">
+    </div>
+    </div>
+
+
+{% endblock %}
+

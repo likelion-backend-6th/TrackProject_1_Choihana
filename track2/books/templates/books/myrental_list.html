@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title%} 나의 대여목록 {% endblock %}
+{% block content %}
+<h1>나의 대여목록</h1>
+<ul class="list-group">
+    {% for rental in rentals %}
+   <li class="list-group-item"> 도서명: {{rental.rental_book}} | 대여일: {{ rental.rental_date }}</li>
+    {% if rental.return_date %}
+    <p>반납완료 | 반납일: {{ rental.return_date }}</p>
+    {% else %}
+    <a class="list-gruop-item list-group-item-action" href="{% url 'book_return' rental.id%}">반납하기</a>
+    {% endif %}
+{% endfor %}
+</ul>
+
+{% endblock %}

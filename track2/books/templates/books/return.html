@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>책 반납하기</h1>
+{{rental.rental_book}} 반납완료!
+반납일: {{rental.return_date}}
+<a href="{% url 'book_list' %}">메인으로 돌아가기</a>
+{% endblock %}
