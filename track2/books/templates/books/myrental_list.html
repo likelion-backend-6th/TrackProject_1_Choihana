@@ -14,7 +14,8 @@
     {% endif %}
 {% endfor %}
 </ul>
-<h1>나의 리뷰 목록</h1>
+<h1>나의 리뷰 목록 </h1>
+<h3>전체 리뷰수: {{review_count}} | 평점: {{review_avg}}</h3>
 <ul class="list-group">
     {% for review in reviews %}
    <li class="list-group-item"> 도서명: {{review.review_book}} | 평점: {{ review.rating }} | {{review.review}}</li>

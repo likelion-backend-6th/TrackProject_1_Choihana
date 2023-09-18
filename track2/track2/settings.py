@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'redisboard',
 
 
 ]
@@ -138,3 +139,10 @@ EMAIL_HOST_USER = 'hanazzang999@gmail.com'
 EMAIL_HOST_PASSWORD = 'exeh fpyz idln rttb'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+CACHES ={
+    'default' : {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+    }
+}

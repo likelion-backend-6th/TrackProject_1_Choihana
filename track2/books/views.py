@@ -1,5 +1,6 @@
 import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -110,7 +111,15 @@ class MyRentalListView(LoginRequiredMixin,ListView):
 
     def get_context_data(self,  **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rental_count'] = Rental.objects.filter(rental_user=self.request.user).count()
+       #redis cache
+        rental_count = cache.get('rental_count')
+        if not rental_count:
+            context['rental_count'] = Rental.objects.filter(rental_user=self.request.user).count()
+            cache.set('rental_count', context['rental_count'])
+
         context['rental_count_not_return'] = Rental.objects.filter(rental_user=self.request.user, return_date__isnull=True).count()
         context['reviews'] = ReviewRating.objects.filter(review_user=self.request.user)
+        context['review_count'] = ReviewRating.objects.filter(review_user=self.request.user).count()
+        context['review_avg'] = ReviewRating.objects.filter(review_user=self.request.user).aggregate(Avg('rating'))['rating__avg']
+
         return context
