@@ -3,7 +3,7 @@
 {{book.title}}
 {% endblock %}
 {% block content %}
-    <div class="container text-container">
+<div class="container text-container">
     <h1>{{book.title}} </h1>
         <div class="row">
             <div class="col">
@@ -22,40 +22,24 @@
             {% endif %}
             </div>
 
-
         </div>
 
         <div clas="row">
-
             <p>{{book.summary}}</p>
         </div>
-
 
     <div class="row">
         <img class='w-50' src="{{book.image.url}}" alt="">
     </div>
 
-        <div class="row">
-            <h3>리뷰 작성</h3>
-            <form method="POST" class="form-control">
-                {% csrf_token %}
-                <p>별점(1~5): {{ form.rating}}</p>
-                {{form.review}}
-
-                <input type="submit" value ='리뷰 등록'>
-            </form>
-        </div>
-        <div class="row">
-            <h3>리뷰 목록 (평점: {{ review_avg|floatformat:1 }}점) </h3>
-            <ul class="list-group">
-                {% for r in review %}
-                <li class="list-group-item">
-                    <p>{{r.rating}}점|{{r.review}}</p>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+    <!-- Review 관련 코드 -->
+    <div class="row">
+        {% include 'reviews/review_forms.html' %}
     </div>
+    <div class="row">
+        {% include 'reviews/review_list.html' %}
+    </div>
+</div>
 
 {% endblock %}
 

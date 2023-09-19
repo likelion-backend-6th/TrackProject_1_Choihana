@@ -1,0 +1,24 @@
+<h3>리뷰 목록 (평점: {{ review_avg|floatformat:1 }}점) </h3>
+<div class="container">
+    <div class="row">
+        <ul class="list-group list-group-flush">
+        {% for r in review %}
+            <li class="list-group-item">
+                <div class="row  justify-content-start">
+                    <div class="col">
+                        <p>작성자: {{r.review_user}} ({{r.rating}}점) <small>{{r.created_date}}</small></p>
+                        <p>{{r.review}}</p>
+                    </div>
+
+                    <div class="col order-last col-auto">
+                    {% if request.user == r.review_user %}
+                        <a class="btn btn-light" href="{% url 'review_edit' book.id r.id %}"> edit </a>
+                        <a class="btn btn-secondary" href="{% url 'review_delete' book.id r.id %}"> delete </a>
+                    {% endif %}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+        </div>
+</div>

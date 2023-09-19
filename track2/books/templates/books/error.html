@@ -1,1 +1,12 @@
-<h1>error</h1>
+{% if error_codes %}
+  <ul>
+    {% for field, codes in error_codes.items %}
+      <li>Field: {{ field }} - Error Codes: {{ codes|join:", " }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+
+
+

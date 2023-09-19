@@ -1,10 +1,13 @@
 import datetime
+
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, CreateView
 from .models import Book, Rental, ReviewRating
 from .tasks import mock, book_return
@@ -59,21 +62,6 @@ class BookDetailView(DetailView):
 
         return context
 
-    # 리뷰 작성 (POST method)
-    def post(self, request, pk):
-        form = ReviewForm(request.POST)
-        book = Book.objects.get(pk=pk)
-        if form.is_valid():
-            #form.save()
-            r = form.save(commit=False)
-            data = form.cleaned_data
-            r.review_book = book
-            r.review_user = request.user
-            r.review = data['review']
-            r.rating = data['rating']
-            r.save()
-            return redirect('book_detail', pk=pk)
-
 
 # 대여하기 기능 구현
 def rental_book(request, book_id):
@@ -123,3 +111,44 @@ class MyRentalListView(LoginRequiredMixin,ListView):
         context['review_avg'] = ReviewRating.objects.filter(review_user=self.request.user).aggregate(Avg('rating'))['rating__avg']
 
         return context
+
+
+# 리뷰 작성 함수
+@require_POST
+def review_create(request, pk):
+    form = ReviewForm(request.POST)
+    book = get_object_or_404(Book, pk=pk)
+    if form.is_valid():
+        #form.save()
+        r = form.save(commit=False)
+        data = form.cleaned_data
+        r.review_book = book
+        r.review_user = request.user
+        r.review = data['review']
+        r.rating = data['rating']
+        r.save()
+        return redirect('book_detail', pk=pk)
+    else:
+        errors = form.errors.as_data()
+        error_codes = {field: [error.code for error in errors[field]] for field in errors}
+        return render(request, 'books/error.html',{'form':form, 'error_codes':error_codes})
+
+
+# 리뷰 수정 함수
+def review_edit(request,  book_id, review_id):
+    review = get_object_or_404(ReviewRating, pk=review_id)
+    form = ReviewForm(instance=review)
+    if request.method == 'POST':
+        update_form = ReviewForm(request.POST, instance=review)
+        if update_form.is_valid():
+            update_form.save()
+            return redirect('book_detail', pk=book_id)
+
+    return render(request, 'reviews/review_edit.html', {'form':form, 'review':review})
+
+# 리뷰 삭제
+def review_delete(request, book_id, review_id):
+    review = get_object_or_404(ReviewRating, pk=review_id)
+    review.delete()
+
+    return redirect('book_detail', pk=book_id)

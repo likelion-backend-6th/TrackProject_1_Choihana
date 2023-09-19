@@ -1,0 +1,13 @@
+<h3>리뷰 작성</h3>
+<form action="{% url 'review_create' book.id %}" method="POST" class="form-control">
+    {% csrf_token %}
+    <div class="row"><p>별점(1~5): {{ form.rating}}</p></div>
+    <div class="row">
+    <div class="col">{{form.review}}</div>
+    <div class="col order-last col-auto">
+       <input type="submit" value ='리뷰 등록' class="btn btn-primary" />
+    </div>
+    </div>
+</form>
+
+
