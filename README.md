@@ -37,4 +37,11 @@
 | 대여한 도서 리스트를 확인할 수 있고 반납할 수 있다. 총 대여한 도서의 수를 확인할 수 있다.  |
 | 작성한 리뷰 목록을 확인 할 수 있고, 총 리뷰 수와 평점을 알 수 있다. |
 
+5. 도서 반납 시 이메일 발송
 
+|celery | 이메일 |
+| -- | -- |
+|<img width="100%" alt="f2" src="https://github.com/likelion-backend-6th/TrackProject_2_Choihana/assets/20200375/b70fe106-e4df-45ae-a9b8-4b4b11576488">|<img width="100%" alt="f1" src="https://github.com/likelion-backend-6th/TrackProject_2_Choihana/assets/20200375/b8087ba4-d0b2-4820-af82-6d739fe450da">|
+
+
+   
