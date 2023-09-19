@@ -7,8 +7,13 @@
 - 멤버: 개인 프로젝트
 
 ### 주요 화면 및 기능
-1. 
-<p align="left">
+1. 메인화면
+
+|전체도서 리스트 | 검색도서 리스트 |
+| -- | -- |
+|<img width="100%" alt="c2" src="https://github.com/likelion-backend-6th/TrackProject_1_Choihana/assets/20200375/1242e683-242b-44c0-a54b-20a1e64da902"> | <img width="100%" alt="c1" src="https://github.com/likelion-backend-6th/TrackProject_1_Choihana/assets/20200375/96a05aa3-2f4f-4ce9-82be-c254adba7962">|
+| 전체 도서 목록과 잔여 수량을 알 수 있다. | 특정 검색어를 포함한 도서 목록과 잔여 수량을 알 수 있다.|
+
   
 </p>
 2. 도서 상세 화면 
